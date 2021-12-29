@@ -17,25 +17,21 @@ void	free_char_array(char **array)
 void	free_all_list(t_linked_order *order)
 {
 	t_linked_order		*tmp;
+	t_linked_order		*next;
 	int			i;
-
-	while (order->next != NULL)
+	
+	tmp = order;
+	while(tmp)
 	{
+		next = tmp->next;
 		i = 0;
-		tmp = order;
-		order = order->next;
 		while (tmp->cmdline[i].cmd != NULL)
 			free(tmp->cmdline[i++].cmd);
 		free(tmp->cmdline);
 		free(tmp->err_manage.errtoken);
 		free(tmp);
+		tmp = next;
 	}
-	i = 0;
-	while (order->cmdline[i].cmd != NULL)
-		free(order->cmdline[i++].cmd);
-	free(order->cmdline);
-	free(order->err_manage.errtoken);
-	free(order);
 }
 
 int	chk_line(char *line)
