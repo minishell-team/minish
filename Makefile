@@ -10,7 +10,7 @@ LIBFT		= libft.a
 LIBFT_DIR	= libft
 
 SRC_DIR 	= srcs
-SRC 		= srcs/main.c \
+SRC 		= srcs/main.c srcs/begin_util.c \
 	  	  	  srcs/parse.c srcs/exec.c
 
 OBJ_DIR 	= objs

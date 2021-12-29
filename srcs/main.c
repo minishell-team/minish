@@ -93,7 +93,6 @@ void	init_mini(t_minishell *mini, char **envp)
 int				main(int argc, char **argv, char **envp)
 {
 	char				*line;
-	char				**cpenv;
 	t_minishell			mini;
 
 	init_mini(&mini, envp);
