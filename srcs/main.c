@@ -104,9 +104,9 @@ int				main(int argc, char **argv, char **envp)
 			if (*line != '\0' && !chk_line(line))
 			{
 				add_history(line);
-				parse(&mini.lo, line);
+				parse(&mini, line);
 				g_exit = exec(&mini, argv);
-				free_all_list(&mini.lo);
+				free_all_list(mini.lo);
 			}
 			free(line); // readline으로 할당한 line을 해제시켜줍니다.
 			continue;
