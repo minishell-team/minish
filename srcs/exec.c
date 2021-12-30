@@ -29,7 +29,7 @@ int	func_exec(t_minishell *mini, int *pipe_fd)
 	else if (ft_strncmp("unset", mini->lo->cmdline[0].cmd, 6) == 0)
 		return (mini_unset(mini));
 	else if (ft_strncmp("env", mini->lo->cmdline[0].cmd, 4) == 0)
-		return (mini_env(mini->env, fd_out));
+		return (mini_env(mini, fd_out));
 	else if (ft_strncmp("exit", mini->lo->cmdline[0].cmd, 5) == 0)
 		return (mini_exit(mini));
 	else if (extern_func_exec(mini, pipe_fd) == 0)

@@ -16,14 +16,14 @@ int         redirect_handler(t_minishell *mini, int **pipe_fd);
 int         do_redirect(t_linked_order *order, int **pipe_fd);
 int         check_flag(t_minishell *mini);
 
-int         mini_echo(t_minishell mini, int fd_out);
-int         mini_cd(t_minishell mini);
-int         mini_pwd(t_minishell fd_out);
-int         mini_export(t_minishell mini, int fd_out);
-int         mini_unset(t_minishell mini);
-int         mini_env(t_minishell mini, int fd_out);
-int         mini_exit(t_minishell mini);
-int         extern_func_exec(t_minishell mini, int *pipe_fd);
+int         mini_echo(t_minishell *mini, int fd_out);
+int         mini_cd(t_minishell *mini);
+int         mini_pwd(int fd_out);
+int         mini_export(t_minishell *mini, int fd_out);
+int         mini_unset(t_minishell *mini);
+int         mini_env(t_minishell *mini, int fd_out);
+int         mini_exit(t_minishell *mini);
+int         extern_func_exec(t_minishell *mini, int *pipe_fd);
 
 
 #endif
