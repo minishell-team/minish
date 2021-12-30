@@ -59,7 +59,6 @@ int	separate_proc(t_minishell *mini, int *pipe_fd)
 	{
 		dup2(pipe_fd[0], STDIN);
 		close(pipe_fd[0]);
-		free_linked_order(mini);
 		g_exit = exec(mini);
 		exit(g_exit);
 	}

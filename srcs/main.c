@@ -86,8 +86,9 @@ void	init_mini(t_minishell *mini, char **argv, char **envp)
 
 int				main(int argc, char **argv, char **envp)
 {
-	char				*line;
-	t_minishell			mini;
+	char			*line;
+	t_minishell		mini;
+	t_linked_order	*order;
 
 	init_mini(&mini, argv, envp);
 	while (1)
@@ -99,13 +100,14 @@ int				main(int argc, char **argv, char **envp)
 			{
 				add_history(line);
 				parse(&mini, line);
+				order = mini.lo;
 				g_exit = exec(&mini);
-				free_all_list(mini.lo);
+				free_all_list(order);
 			}
 			free(line);
 			continue;
 		}
-		write(1,"\x1b[1A\033[12Cexit\n",15);
+		ft_putendl_fd("\x1b[1A\033[12Cexit", STDOUT);
 		break ;
 	}
 	return (0);

@@ -36,7 +36,7 @@ typedef struct	s_linked_order
 {// 다음 파이프 직전 까지 정보
 	t_token			*cmdline;
 	int				pipe_flag; //다음 링크드가 있으면1 없으면 0
-	int				exit_flag; //마지막인지 체크(불필요 삭제예정)
+	int				exit_flag; // 첫번째 링크드에 exit토큰이 있는지 체크(해당시 1 아니면 0)
 	int				right_flag; // > >>가 있는지 (에러 -1, 없음 또는 왼쪽 0, 있음 1)
 	char			quote; // 불필요
 	char			*(redirect_filename[4]);
