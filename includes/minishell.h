@@ -51,6 +51,7 @@ typedef struct	s_linked_order
 
 typedef struct s_minishell
 {
+	char					**argv; //main에서 받아온 argv
 	char					**env; //동적할당X 기본환경변수
 	int						len; //환경변수 갯수
 	char					**key; //환경변수 키
