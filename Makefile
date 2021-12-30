@@ -3,15 +3,20 @@ RM				= rm -rf
 CFLAGS 			= -Wall -Wextra -Werror
 NAME 			= minishell
 
-READLINE_LIB 	= -lreadline -L/usr/local/opt/readline/lib
-READLINE_INC	= -I/usr/local/opt/readline/include
+#READLINE_LIB 	= -lreadline -L/usr/local/opt/readline/lib
+#READLINE_INC	= -I/usr/local/opt/readline/include
+
+READLINE_LIB 	= -lreadline -L/opt/homebrew/opt/readline/lib
+READLINE_INC	= -I/opt/homebrew/opt/readline/include
 
 LIBFT		= libft.a
 LIBFT_DIR	= libft
 
 SRC_DIR 	= srcs
 SRC 		= srcs/main.c srcs/begin_util.c \
-	  	  	  srcs/parse.c srcs/exec.c
+	  	  	  srcs/parse.c srcs/exec.c \
+			  srcs/parse_cmd.c srcs/parse_env_cnt.c\
+			  srcs/parse_env.c srcs/parse_utils.c
 
 OBJ_DIR 	= objs
 OBJ 		= $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
