@@ -1,41 +1,38 @@
 #include "../includes/minishell.h"
 
-int	set_redirect(t_minishell *mini, int *fd_addr, int *pipe_fd)
+int	set_redirect(t_minishell *mini, int *fd_out, int **pipe_fd)
 {
-	int fd;
-
-	fd = *fd_addr;
-	mini->lo->right_flag = redirect_fd(mini->lo, &pipe_fd);
+	mini->lo->right_flag = redirect_handler(mini->lo, pipe_fd);
 	if (mini->lo->right_flag == -1)
-		return (0);
+		return (FAIL);
 	if (mini->lo->pipe_flag == 1 && mini->lo->right_flag == 0)
-		fd = pipe_fd[1];
+		*fd_out = (*pipe_fd)[1];
 	else
-		fd = 1;	
-	return (1);
+		*fd_out = STDOUT;
+	return (SUCCESS);
 }
 
-int	func_exec(t_minishell *mini, char **av, int *pipe_fd)
+int	func_exec(t_minishell *mini, int *pipe_fd)
 {
-	int			fd;
+	int			fd_out;
 
-	if (!(set_redirect(mini, &fd, pipe_fd)))
+	if (!(set_redirect(mini, &fd_out, &pipe_fd)))
 		return (-1);
-	if (ft_strncmp("pwd", mini->lo->cmdline[0].cmd, 4) == 0)
-		return (mini_pwd(fd));
+	if (ft_strncmp("echo", mini->lo->cmdline[0].cmd, 5) == 0)
+		return (mini_echo(mini, fd_out));
 	else if (ft_strncmp("cd", mini->lo->cmdline[0].cmd, 3) == 0)
 		return (mini_cd(mini));
-	else if (ft_strncmp("exit", mini->lo->cmdline[0].cmd, 5) == 0)
-		return (mini_exit(mini));
-	else if (ft_strncmp("env", mini->lo->cmdline[0].cmd, 4) == 0)
-		return (mini_env(mini->env, fd));
+	else if (ft_strncmp("pwd", mini->lo->cmdline[0].cmd, 4) == 0)
+		return (mini_pwd(fd_out));
 	else if (ft_strncmp("export", mini->lo->cmdline[0].cmd, 7) == 0)
-		return (mini_export(mini, fd));
-	else if (ft_strncmp("echo", mini->lo->cmdline[0].cmd, 5) == 0)
-		return (mini_echo(mini, fd));
+		return (mini_export(mini, fd_out));
 	else if (ft_strncmp("unset", mini->lo->cmdline[0].cmd, 6) == 0)
 		return (mini_unset(mini));
-	else if (extra_func_exec(mini, av, pipe_fd) == 0)
+	else if (ft_strncmp("env", mini->lo->cmdline[0].cmd, 4) == 0)
+		return (mini_env(mini->env, fd_out));
+	else if (ft_strncmp("exit", mini->lo->cmdline[0].cmd, 5) == 0)
+		return (mini_exit(mini));
+	else if (extern_func_exec(mini, pipe_fd) == 0)
 	{
 		mini->lo->err_manage.errcode = 1;
 		return (-1);
@@ -43,7 +40,7 @@ int	func_exec(t_minishell *mini, char **av, int *pipe_fd)
 	return (0);
 }
 
-int	separate_proc(t_minishell *mini, char **av, int *pipe_fd)
+int	separate_proc(t_minishell *mini, int *pipe_fd)
 {
 	pid_t	pid;
 	int		status;
@@ -62,7 +59,8 @@ int	separate_proc(t_minishell *mini, char **av, int *pipe_fd)
 	{
 		dup2(pipe_fd[0], STDIN);
 		close(pipe_fd[0]);
-		g_exit = exec(mini->lo->next, av);
+		free_linked_order(mini);
+		g_exit = exec(mini);
 		exit(g_exit);
 	}
 	mini->lo->err_manage.errcode = 1;
@@ -70,18 +68,24 @@ int	separate_proc(t_minishell *mini, char **av, int *pipe_fd)
 	return (g_exit);
 }
 
-int	exec(t_minishell *mini, char **av)
+void	update_g_exit(t_minishell *mini, int exec_status)
+{
+	if (exec_status == 1)
+		g_exit = 0;
+	else if (exec_status == 0)
+		return ;
+	
+}
+
+int	exec(t_minishell *mini)
 {
 	int	pipe_fd[2];
 	int	exec_status;
 
 	pipe(pipe_fd);
-	exec_status = func_exec(mini, av, pipe_fd);
-	if (exec_status == -1)
-		print_error(mini->lo);
-	else if (exec_status == 1)
-		g_exit = 0;
-	dup2(420, STDIN);
-	dup2(421, STDOUT);
-	return (separate_proc(mini, av, pipe_fd));
+	exec_status = func_exec(mini, pipe_fd);
+	update_g_exit(mini->lo, exec_status);
+	dup2(STDIN_BACKUP, STDIN);
+	dup2(STDOUT_BACKUP, STDOUT);
+	return (separate_proc(mini, pipe_fd));
 }

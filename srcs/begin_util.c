@@ -18,7 +18,7 @@ void	free_all_list(t_linked_order *order)
 {
 	t_linked_order		*tmp;
 	t_linked_order		*next;
-	int			i;
+	int					i;
 	
 	tmp = order;
 	while(tmp)
@@ -42,8 +42,25 @@ int	chk_line(char *line)
 	while (line[i] != '\0')
 	{
 		if (line[i] != 32 && !(line[i] >= 9 && line[i] <= 13))
-			return (0);
+			return (FAIL);
 		i++;
 	}
-	return (1);
+	return (SUCCESS);
+}
+
+void	free_linked_order(t_minishell *mini)
+{
+	t_linked_order		*next;
+	int					i;
+	
+	if (mini->lo == NULL)
+		return ;
+	next = mini->lo->next;
+	i = 0;
+	while (mini->lo->cmdline[i].cmd != NULL)
+		free(mini->lo->cmdline[i++].cmd);
+	free(mini->lo->cmdline);
+	free(mini->lo->err_manage.errtoken);
+	free(mini->lo);
+	mini->lo = next;
 }
