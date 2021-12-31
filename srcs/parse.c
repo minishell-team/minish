@@ -7,20 +7,20 @@ void	get_split_size2(const char *s, const char c, t_gss *val)
 		reset_add(val);
 		val->begin = 0;
 	}
-	else if ((*s == '<' || *s == '>') && val->close == 0)// ex) cat toast> or cat toast>>
+	else if ((*s == '<' || *s == '>') && val->close == 0)
 	{
 		if (val->redir == 0 && *(s - 1) != ' ')
 			val->cnt++;
 		val->redir++;
 	}
 	else if (*s != c && *s != '\'' && *s != '"' && !(*s == '>' || *s == '<') \
-		&& val->close == 0 && (*(s - 1) == '>' || *(s - 1) == '<'))// ex) echo temp>[?]
-			reset_add(val);
+		&& val->close == 0 && (*(s - 1) == '>' || *(s - 1) == '<'))
+		reset_add(val);
 	else if (*s == '\'' && val->close == '\'' \
-		&& (*(s - 1) == '>' || *(s - 1) == '<'))// ex) echo temp>'
+		&& (*(s - 1) == '>' || *(s - 1) == '<'))
 		reset_add(val);
 	else if (*s == '"' && val->close == '"' \
-		&& (*(s - 1) == '>' || *(s - 1) == '<'))// ex) echo temp>"
+		&& (*(s - 1) == '>' || *(s - 1) == '<'))
 		reset_add(val);
 }
 
@@ -60,10 +60,13 @@ t_linked_order	*create_node(t_minishell *mini, char *line, int val_end, int val_
 	node = (t_linked_order *)malloc(sizeof(t_linked_order));
 	if (!node)
 		return (0);
-	node->cmdline = cmd_split(line, ' ', 0);
+	node->cmdline = cmd_split(line, ' ', 0, -1);
 	rebuild_token(mini, node->cmdline);
-	node->pipe_flag = val_end;
-	if (val_prev == 0 && val_end == 1) //처음이자 마지막 토큰
+	if (val_end)
+		node->pipe_flag = 0;
+	else
+		node->pipe_flag = 1;
+	if (val_prev == 0 && val_end == 1)
 		node->exit_flag = 1;
 	else
 		node->exit_flag = 0;
@@ -94,17 +97,18 @@ int	insert_LS(t_minishell *mini, char *line, int val_end, int val_prev)
 	return (1);
 }
 
-
 void	parse(t_minishell *mini, char *line)
 {
-	t_parse val;
-	
-	parse_init(&val);
+	t_parse	val;
+
+	parse_init(&val, mini);
 	while (++val.move >= 0)
 	{
-		if ((line[val.move] == '\'' || line[val.move] == '\"') && val.close == 0)
+		if ((line[val.move] == '\'' || line[val.move] == '\"') \
+			&& val.close == 0)
 			val.close = 1;
-		else if ((line[val.move] == '\'' || line[val.move] == '\"') && val.close == 1)
+		else if ((line[val.move] == '\'' || line[val.move] == '\"') \
+			&& val.close == 1)
 			val.close = 0;
 		if ((line[val.move] == '|' && val.close == 0) || line[val.move] == '\0')
 		{
@@ -114,14 +118,16 @@ void	parse(t_minishell *mini, char *line)
 				line[val.move] = '\0';
 			if (!insert_LS(mini, &line[val.prev], val.end, val.prev))
 			{
-				free_all_list(mini);
-				return;
+				free_all_list(mini->lo);
+				return ;
 			}
 			if (val.end)
-				break;
+				break ;
 			val.prev = val.move + 1;
 		}
 	}
+
+	//test....
 	t_linked_order *list;
 	t_token *token;
 	list = mini->lo;
@@ -130,10 +136,10 @@ void	parse(t_minishell *mini, char *line)
 		token = list->cmdline;
 		while(token->cmd)
 		{
-			printf("%s\n", token->cmd);
+			printf("token : [%s] redir flag : [%d]\n",token->cmd, token->redir_flag);
 			token++;
 		}
+		printf("pipe flag : [%d] exit flag : [%d]\n\n", list->pipe_flag, list->exit_flag);
 		list = list->next;
 	}
-	exit(0);
 }
