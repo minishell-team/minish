@@ -1,36 +1,30 @@
 #include "../includes/minishell.h"
 
-static void	cal_len2(const char *s, const char c, t_gss *val)
+static int	cal_len2(const char *s, const char c, t_gss *val)
 {
-	while (s[val->len])
+	if (s[val->len] == '"' && val->close == '"')
+		val->close = 0;
+	else if (s[val->len] == '"' && val->close == 0)
+		val->close = '"';
+	else if (s[val->len] == '\'' && val->close == 0)
+		val->close = '\'';
+	else if (s[val->len] == '\'' && val->close == '\'')
+		val->close = 0;
+	if (val->begin == 0 && s[val->len] != c)
 	{
-		if (s[val->len] == '"' && val->close == '"')
-			val->close = 0;
-		else if (s[val->len] == '"' && val->close == 0)
-			val->close = '"';
-		else if (s[val->len] == '\'' && val->close == 0)
-			val->close = '\'';
-		else if (s[val->len] == '\'' && val->close == '\'')
-			val->close = 0;
-		if (val->begin == 0)
-		{
-			if (s[val->len] != c)
-			{
-				val->begin = 1;
-				val->len++;
-			}
-		}
-		else
-		{
-			if (s[val->len] == c && val->close == 0)
-				break ;
-			else if ((s[val->len] == '>' || s[val->len] == '<') \
-				&& val->close == 0)
-				break ;
-			else
-				val->len++;
-		}
+		val->begin = 1;
+		val->len++;
 	}
+	else if (val->begin == 1)
+	{
+		if (s[val->len] == c && val->close == 0)
+			return (0);
+		else if ((s[val->len] == '>' || s[val->len] == '<') && val->close == 0)
+			return (0);
+		else
+			val->len++;
+	}
+	return (1);
 }
 
 static int	cal_len(const char *s, const char c)
@@ -48,15 +42,19 @@ static int	cal_len(const char *s, const char c)
 				return (val.len);
 		}
 	}
-	cal_len2(s, c, &val);
+	while (s[val.len])
+	{
+		if (!cal_len2(s, c, &val))
+			break ;
+	}
 	return (val.len);
 }
 
-static char *cmd_dup(const char *line, char pivot, int *start)
+static char	*cmd_dup(const char *line, char pivot, int *start)
 {
-	int len;
-	int move;
-	char *cmd;
+	int		len;
+	int		move;
+	char	*cmd;
 
 	len = 0;
 	len = cal_len(&line[*start], pivot);
@@ -85,19 +83,16 @@ static void	split_fail_free(t_token *res, int i)
 	return ;
 }
 
-t_token *cmd_split(const char *line, const char pivot, int move)
+t_token	*cmd_split(const char *line, const char pivot, int move, int token_i)
 {
 	t_token	*res;
-	int		token_i;
 
-	token_i = -1;
 	if (!line)
 		return (0);
 	res = (t_token *)malloc(sizeof(t_token) \
 		* (get_split_size(line, pivot) + 1));
 	if (!res)
 		return (0);
-	printf("str: [%s]\n", line);
 	while (line[move])
 	{
 		if (line[move] == pivot)

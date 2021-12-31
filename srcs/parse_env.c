@@ -1,8 +1,8 @@
 #include "../includes/minishell.h"
 
-int redir_chkeck(char *str)
+int	redir_check(char *str)
 {
-	size_t str_len;
+	size_t	str_len;
 
 	str_len = ft_strlen(str);
 	if (!ft_strncmp("<<", str, str_len) || !ft_strncmp(">>", str, str_len) \
@@ -12,14 +12,14 @@ int redir_chkeck(char *str)
 		return (0);
 }
 
-int		double_cnt(char *str, int *size, t_minishell *mini)
+int	double_cnt(char *str, int *size, t_minishell *mini)
 {
-	int index;
+	int	index;
 
 	index = 1;
 	while (str[index] && str[index] != '\"')
 	{
-		if (str[index] == '$') //쌍따옴표 안의 변수처리.
+		if (str[index] == '$')
 			index += (env_cnt(&str[index], size, mini) + 1);
 		else
 		{
@@ -30,9 +30,9 @@ int		double_cnt(char *str, int *size, t_minishell *mini)
 	return (index);
 }
 
-int		single_cnt(char *str, int *size)
+int	single_cnt(char *str, int *size)
 {
-	int move;
+	int	move;
 
 	move = 1;
 	while (str[move] && str[move] != '\'')
@@ -43,18 +43,18 @@ int		single_cnt(char *str, int *size)
 	return (move);
 }
 
-int rebuild_size(char *str, t_minishell *mini)
+int	rebuild_size(char *str, t_minishell *mini)
 {
 	int	move;
-	int size;
+	int	size;
 
 	size = 0;
 	move = -1;
 	while (str[++move])
 	{
-		if (str[move] == '\'' && unclosed(&str[move], '\'')) // ' 으로 잘 닫혀있는지?
+		if (str[move] == '\'' && unclosed(&str[move], '\''))
 			move += single_cnt(&str[move], &size);
-		else if (str[move] == '\"' && unclosed(&str[move], '\"')) // " 으로 잘 닫혀있는지?
+		else if (str[move] == '\"' && unclosed(&str[move], '\"'))
 			move += double_cnt(&str[move], &size, mini);
 		else if (str[move] == '$')
 			move += env_cnt(&str[move], &size, mini);
@@ -64,7 +64,7 @@ int rebuild_size(char *str, t_minishell *mini)
 	return (size);
 }
 
-t_token *rebuild_token(t_minishell *mini, t_token *token)
+t_token	*rebuild_token(t_minishell *mini, t_token *token)
 {
 	int		i;
 	int		cmd_len;
@@ -78,12 +78,12 @@ t_token *rebuild_token(t_minishell *mini, t_token *token)
 		cmd_len = rebuild_size(tmp_cmd, mini);
 		if (token[i].cmd[0] == '<' || token[i].cmd[0] == '>')
 		{
-			if (redir_chkeck(token[i].cmd))
+			if (redir_check(token[i].cmd))
 				token[i].redir_flag = 1;
 			else
 				token[i].redir_flag = -1;
 		}
-		token[i].cmd = (char*)malloc(sizeof(char) * (cmd_len + 1));
+		token[i].cmd = (char *)malloc(sizeof(char) * (cmd_len + 1));
 		rebuild_cmd(tmp_cmd, token[i].cmd, mini);
 		free(tmp_cmd);
 	}

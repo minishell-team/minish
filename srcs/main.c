@@ -90,6 +90,8 @@ int				main(int argc, char **argv, char **envp)
 	t_minishell		mini;
 	t_linked_order	*order;
 
+	if (argc < 1)
+		return (0);
 	init_mini(&mini, argv, envp);
 	while (1)
 	{
@@ -101,8 +103,8 @@ int				main(int argc, char **argv, char **envp)
 				add_history(line);
 				parse(&mini, line);
 				order = mini.lo;
-				g_exit = exec(&mini);
-				free_all_list(order);
+				//g_exit = exec(&mini);
+				free_all_list(mini.lo);
 			}
 			free(line);
 			continue;
@@ -110,5 +112,6 @@ int				main(int argc, char **argv, char **envp)
 		ft_putendl_fd("\x1b[1A\033[12Cexit", STDOUT);
 		break ;
 	}
+	free_key_value(&mini);
 	return (0);
 }
