@@ -14,13 +14,13 @@ void	signal_handler(int sig)
 		{
 			rl_on_new_line();
 			rl_redisplay();
-			ft_putstr_fd("  \n",STDOUT);
+			ft_putstr_fd("  \n", STDOUT);
 			rl_on_new_line();
 			rl_replace_line("", 0);
 			rl_redisplay();
 		}
 		else
-			ft_putstr_fd("\b\b",STDOUT);
+			ft_putstr_fd("\n", STDOUT);
 	}
 	else if(sig == SIGQUIT)
 	{
@@ -28,10 +28,10 @@ void	signal_handler(int sig)
 		{
 			rl_on_new_line();
 			rl_redisplay();
-			ft_putstr_fd("  \b\b",STDOUT);
+			ft_putstr_fd("  \b\b", STDOUT);
 		}
 		else
-			ft_putstr_fd("Quit: 3\n",STDOUT);
+			ft_putstr_fd("Quit: 3\n", STDOUT);
 	}
 }
 

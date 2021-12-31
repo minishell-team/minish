@@ -26,12 +26,7 @@ int mini_echo(t_minishell *mini, int fd_out)
     write(fd_out, "\b", 1);
 	if (option_n == 0)
 		write(fd_out, "\n", 1);
-	return (1);
-}
-
-int mini_cd(t_minishell *mini)
-{
-
+	return (NEED_INIT);
 }
 
 int mini_pwd(int fd_out)
@@ -41,7 +36,7 @@ int mini_pwd(int fd_out)
 	path = getcwd(NULL, 0);
 	ft_putendl_fd(path, fd_out);
 	free(path);
-	return (1);
+	return (NEED_INIT);
 }
 
 int mini_export(t_minishell *mini, int fd_out)
@@ -66,7 +61,7 @@ int mini_env(t_minishell *mini, int fd_out)
 		ft_putendl_fd(mini->content[i], fd_out);
 		i++;
 	}
-	return (1);
+	return (NEED_INIT);
 }
 
 int extern_func_exec(t_minishell *mini, int *pipe_fd)

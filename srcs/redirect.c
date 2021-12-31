@@ -86,7 +86,7 @@ int	redirect_handler(t_minishell *mini, int **pipe_fd)
 	file_fd = -1;
 	i = -1;
 	if (!check_flag(mini))
-		return (-1);
+		return (ERROR);
 	i = -1;
 	while (++i < 4)
 		mini->lo->redirect_filename[i] = 0;
@@ -97,10 +97,10 @@ int	redirect_handler(t_minishell *mini, int **pipe_fd)
 			continue ;
 		if (way_check(&mini->lo->cmdline[i], '<'))
 			if (!left_way_handler(mini, i, file_fd))
-				return (-1);
+				return (ERROR);
 		if (way_check(&mini->lo->cmdline[i], '>'))
 			if (!right_way_handler(mini, i, file_fd))
-				return (-1);
+				return (ERROR);
 	}
 	if(mini->lo->redirect_filename[0] || mini->lo->redirect_filename[2])
 		return (do_redirect(mini->lo, pipe_fd));

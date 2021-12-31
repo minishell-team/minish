@@ -46,7 +46,6 @@ typedef struct	s_linked_order
 	//index 3 : righ redirect filename;
 	struct s_err	err_manage;
 	struct s_linked_order	*next;
-	
 }				t_linked_order;
 
 typedef struct s_minishell

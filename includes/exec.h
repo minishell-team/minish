@@ -3,6 +3,8 @@
 
 # define SUCCESS 	    1
 # define FAIL           0
+# define ERROR          -1
+# define NEED_INIT      1
 # define STDIN_BACKUP 	420
 # define STDOUT_BACKUP  421
 

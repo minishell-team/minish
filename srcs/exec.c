@@ -35,7 +35,7 @@ int	func_exec(t_minishell *mini, int *pipe_fd)
 	else if (extern_func_exec(mini, pipe_fd) == 0)
 	{
 		mini->lo->err_manage.errcode = 1;
-		return (-1);
+		return (ERROR);
 	}
 	return (0);
 }
@@ -69,10 +69,6 @@ int	separate_proc(t_minishell *mini, int *pipe_fd)
 
 void	update_g_exit(t_minishell *mini, int exec_status)
 {
-	if (exec_status == 1)
-		g_exit = 0;
-	else if (exec_status == 0)
-		return ;
 	
 }
 
@@ -83,7 +79,10 @@ int	exec(t_minishell *mini)
 
 	pipe(pipe_fd);
 	exec_status = func_exec(mini, pipe_fd);
-	update_g_exit(mini->lo, exec_status);
+	if (exec_status == ERROR)
+		update_g_exit(mini->lo, exec_status);
+	else if (exec_status == NEED_INIT)
+		g_exit = 0;
 	dup2(STDIN_BACKUP, STDIN);
 	dup2(STDOUT_BACKUP, STDOUT);
 	return (separate_proc(mini, pipe_fd));
