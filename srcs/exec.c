@@ -1,10 +1,18 @@
 #include "../includes/minishell.h"
 
+int	exit_pipe_error(void)
+{
+	ft_putstr_fd("minishell: ", STDOUT);
+    ft_putendl_fd("syntax error near unexpected token `|'", STDOUT);
+	g_exit = 258;
+	return (ERROR);
+}
+
 int	set_redirect(t_minishell *mini, int *fd_out, int **pipe_fd)
 {
-	mini->lo->right_flag = redirect_handler(mini->lo, pipe_fd);
-	if (mini->lo->right_flag == -1)
-		return (FAIL);
+	mini->lo->right_flag = redirect_handler(mini, pipe_fd);
+	if (mini->lo->right_flag == ERROR)
+		return (ERROR);
 	if (mini->lo->pipe_flag == 1 && mini->lo->right_flag == 0)
 		*fd_out = (*pipe_fd)[1];
 	else
@@ -16,8 +24,10 @@ int	func_exec(t_minishell *mini, int *pipe_fd)
 {
 	int			fd_out;
 
-	if (!(set_redirect(mini, &fd_out, &pipe_fd)))
-		return (-1);
+	if (mini->lo->cmdline[0].cmd == NULL)
+		return (exit_pipe_error());
+	if (set_redirect(mini, &fd_out, &pipe_fd) == ERROR)
+		return (ERROR);
 	if (ft_strncmp("echo", mini->lo->cmdline[0].cmd, 5) == 0)
 		return (mini_echo(mini, fd_out));
 	else if (ft_strncmp("cd", mini->lo->cmdline[0].cmd, 3) == 0)
@@ -32,12 +42,7 @@ int	func_exec(t_minishell *mini, int *pipe_fd)
 		return (mini_env(mini, fd_out));
 	else if (ft_strncmp("exit", mini->lo->cmdline[0].cmd, 5) == 0)
 		return (mini_exit(mini));
-	else if (extern_func_exec(mini, pipe_fd) == 0)
-	{
-		mini->lo->err_manage.errcode = 1;
-		return (ERROR);
-	}
-	return (0);
+	return (extern_func_exec(mini, pipe_fd));
 }
 
 int	separate_proc(t_minishell *mini, int *pipe_fd)
@@ -59,30 +64,20 @@ int	separate_proc(t_minishell *mini, int *pipe_fd)
 	{
 		dup2(pipe_fd[0], STDIN);
 		close(pipe_fd[0]);
+		free_linked_order(mini);
 		g_exit = exec(mini);
 		exit(g_exit);
 	}
-	mini->lo->err_manage.errcode = 1;
-	print_errstr(mini->lo);
 	return (g_exit);
-}
-
-void	update_g_exit(t_minishell *mini, int exec_status)
-{
-	
 }
 
 int	exec(t_minishell *mini)
 {
 	int	pipe_fd[2];
-	int	exec_status;
 
 	pipe(pipe_fd);
-	exec_status = func_exec(mini, pipe_fd);
-	if (exec_status == ERROR)
-		update_g_exit(mini->lo, exec_status);
-	else if (exec_status == NEED_INIT)
-		g_exit = 0;
+	if (func_exec(mini, pipe_fd) != 0)
+		return (g_exit);
 	dup2(STDIN_BACKUP, STDIN);
 	dup2(STDOUT_BACKUP, STDOUT);
 	return (separate_proc(mini, pipe_fd));

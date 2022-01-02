@@ -9,7 +9,7 @@ int	single_left_redirect(t_linked_order *order)
 	file_fd = open(order->redirect_filename[1], oflag, 0644);
 	if (file_fd < 1)
 	{
-		order->err_manage.errcode = 3;
+		alert_redirect_error(order->redirect_filename[1], 1);
 		return (ERROR);
 	}
 	dup2(file_fd, STDIN);
@@ -28,9 +28,13 @@ int	double_left_redirect(t_linked_order *order, int **pipe_fd)
 	while (1)
 	{
 		line = readline("> ");
-		if (ft_strncmp(line, syntax, syn_len) == 0)
+		if (ft_strncmp(line, syntax, syn_len + 1) == 0)
+		{
+			free(line);	
 			break ;
+		}
 		ft_putendl_fd(line, (*pipe_fd)[1]);
+		free(line);
 	}
 	dup2((*pipe_fd)[0], STDIN);
 	close((*pipe_fd)[0]);
@@ -48,7 +52,7 @@ int	single_right_redirect(t_linked_order *order)
 	file_fd = open(order->redirect_filename[3], oflag, 0744);
 	if (file_fd < 1)
 	{
-		order->err_manage.errcode = 3;
+		alert_redirect_error(order->redirect_filename[3], 1);
 		return (ERROR);
 	}
 	dup2(file_fd, STDOUT);
@@ -65,7 +69,7 @@ int	double_right_redirect(t_linked_order *order)
 	file_fd = open(order->redirect_filename[3], oflag, 0744);
 	if (file_fd < 1)
 	{
-		order->err_manage.errcode = 3;
+		alert_redirect_error(order->redirect_filename[3], 1);
 		return (ERROR);
 	}
 	dup2(file_fd, STDOUT);

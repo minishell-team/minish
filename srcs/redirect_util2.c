@@ -10,9 +10,29 @@ int	check_flag(t_minishell *mini)
 	{
 		if (mini->lo->cmdline[i].redir_flag == -1)
 		{
-			mini->lo->err_manage.errcode = 7;
+			alert_redirect_error(mini->lo->cmdline[i].cmd, 258);
 			return (FAIL);
 		}
 	}
 	return (SUCCESS);
+}
+
+void alert_redirect_error(char *str, int exit_code)
+{
+	g_exit = exit_code;
+	if (str == NULL)
+		str = "";
+	if (exit_code == 1)
+	{
+		ft_putstr_fd("minishell: ", STDOUT);
+		ft_putstr_fd(str, STDOUT);
+		ft_putendl_fd(": No such file or directory", STDOUT);
+	}
+	else if (exit_code == 258)
+	{
+		ft_putstr_fd("minishell: ", STDOUT);
+		ft_putstr_fd("syntax error near unexpected token `", STDOUT);
+		ft_putstr_fd(str, STDOUT);
+		ft_putendl_fd("'", STDOUT);
+	}
 }

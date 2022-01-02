@@ -128,18 +128,18 @@ void	parse(t_minishell *mini, char *line)
 	}
 
 	//test....
-	t_linked_order *list;
-	t_token *token;
-	list = mini->lo;
-	while(list)
-	{
-		token = list->cmdline;
-		while(token->cmd)
-		{
-			printf("token : [%s] redir flag : [%d]\n",token->cmd, token->redir_flag);
-			token++;
-		}
-		printf("pipe flag : [%d] exit flag : [%d]\n\n", list->pipe_flag, list->exit_flag);
-		list = list->next;
-	}
+	// t_linked_order *list;
+	// t_token *token;
+	// list = mini->lo;
+	// while(list)
+	// {
+	// 	token = list->cmdline;
+	// 	while(token->cmd)
+	// 	{
+	// 		printf("token : [%s] redir flag : [%d]\n",token->cmd, token->redir_flag);
+	// 		token++;
+	// 	}
+	// 	printf("pipe flag : [%d] exit flag : [%d]\n\n", list->pipe_flag, list->exit_flag);
+	// 	list = list->next;
+	// }
 }

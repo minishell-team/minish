@@ -59,4 +59,6 @@ void	free_key_value(t_minishell *mini)
 		free(mini->content[i]);
 		i++;
 	}
+	free(mini->key);
+	free(mini->content);
 }
