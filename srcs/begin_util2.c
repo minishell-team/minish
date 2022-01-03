@@ -3,12 +3,15 @@
 void	show_exit_upline(void)
 {
 	char *curr_path;
+	char *str_integer;
 
 	curr_path = getcwd(0, 0);
 	ft_putstr_fd("\x1b[1A\033[", STDOUT);
-	ft_putstr_fd(ft_itoa(ft_strlen(curr_path) + 10), STDOUT);
+	str_integer = ft_itoa(ft_strlen(curr_path) + 10);
+	ft_putstr_fd(str_integer, STDOUT);
 	ft_putendl_fd("Cexit", STDOUT);
 	free(curr_path);
+	free(str_integer);
 }
 
 char	*readline_with_path(void)
