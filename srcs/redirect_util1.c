@@ -49,7 +49,7 @@ int	single_right_redirect(t_linked_order *order)
 	int			oflag;
 
 	oflag = O_WRONLY | O_CREAT | O_TRUNC;
-	file_fd = open(order->redirect_filename[3], oflag, 0744);
+	file_fd = open(order->redirect_filename[3], oflag, 0644);
 	if (file_fd < 1)
 	{
 		alert_redirect_error(order->redirect_filename[3], 1);
@@ -66,7 +66,7 @@ int	double_right_redirect(t_linked_order *order)
 	int			oflag;
 
 	oflag = O_WRONLY | O_CREAT | O_APPEND;
-	file_fd = open(order->redirect_filename[3], oflag, 0744);
+	file_fd = open(order->redirect_filename[3], oflag, 0644);
 	if (file_fd < 1)
 	{
 		alert_redirect_error(order->redirect_filename[3], 1);
