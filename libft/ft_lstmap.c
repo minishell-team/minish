@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mac <marvin@42.fr>                         +#+  +:+       +#+        */
+/*   By: jjeong <jjeong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/07/17 16:31:21 by mac               #+#    #+#             */
-/*   Updated: 2020/07/21 19:20:56 by djeon            ###   ########.fr       */
+/*   Created: 2021/05/06 03:40:26 by jjeong            #+#    #+#             */
+/*   Updated: 2021/12/06 20:15:13 by jjeong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,25 @@
 
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
-	t_list	*new_head;
-	t_list	*new_next;
-	t_list	*curr;
+	t_list	*temp;
+	t_list	*node;
 
-	if (lst == NULL || f == NULL || del == NULL)
+	if (lst == NULL)
 		return (NULL);
-	if ((new_head = ft_lstnew(f(lst->content))) == NULL)
+	temp = ft_lstnew((*f)(lst->content));
+	if (temp == NULL)
 		return (NULL);
-	curr = new_head;
-	lst = lst->next;
-	while (lst)
+	node = temp;
+	while (lst->next != NULL)
 	{
-		if ((new_next = ft_lstnew(f(lst->content))) == NULL)
+		lst = lst->next;
+		node->next = ft_lstnew((*f)(lst->content));
+		if (node->next == NULL)
 		{
-			ft_lstclear(&new_head, del);
+			ft_lstclear(&temp, del);
 			return (NULL);
 		}
-		curr->next = new_next;
-		curr = new_next;
-		lst = lst->next;
+		node = node->next;
 	}
-	return (new_head);
+	return (temp);
 }

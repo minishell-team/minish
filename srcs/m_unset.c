@@ -13,7 +13,7 @@ void	make_new_space(t_minishell *mini, char ***temp, char ***temp2)
 	}
 }
 
-void	pop_env(t_minishell *mini, int key_index)
+void	pop_env(t_minishell *mini, int key_index, char ***e_key, char ***e_val)
 {
 	char	**temp;
 	char	**temp2;
@@ -23,35 +23,35 @@ void	pop_env(t_minishell *mini, int key_index)
 	temp[mini->len] = NULL;
 	temp2[mini->len] = NULL;
 	i = -1;
-	while (++i < mini->len)
+	while ((*e_key)[++i])
 	{
 		if (i == key_index)
 		{
-			free(mini->key[i]);
-			free(mini->content[i]);
+			free((*e_key)[i]);
+			free((*e_val)[i]);
 			continue ;
 		}
-		temp[(i - (i >= key_index))] = mini->key[i];
-		temp2[(i - (i >= key_index))] = mini->content[i];
+		temp[(i - (i >= key_index))] = (*e_key)[i];
+		temp2[(i - (i >= key_index))] = (*e_val)[i];
 	}
-	free(mini->key);
-	free(mini->content);
-	mini->key = temp;
-	mini->content = temp2;
+	free(*e_key);
+	free(*e_val);
+	*e_key = temp;
+	*e_val = temp2;
 }
 
-void	remove_path(t_minishell *mini, char *key)
+void	remove_path(t_minishell *mini, char *key, char ***e_key, char ***e_val)
 {
 	int	key_index;
 
 	key_index = find_env(mini, key);
 	if (key_index == -1)
 		return ;
-	pop_env(mini, key_index);
+	pop_env(mini, key_index, e_key, e_val);
 	mini->len -= 1;
 }
 
-int	mini_unset(t_minishell *mini)
+int	mini_unset(t_minishell *mini, char ***e_key, char ***e_val)
 {
 	int			i;
 
@@ -66,7 +66,7 @@ int	mini_unset(t_minishell *mini)
 		else if ((key_check_str(mini->lo->cmdline[i].cmd, '\0')) == FAIL)
 			alert_export_error("unset", mini->lo->cmdline[i].cmd);
 		else
-			remove_path(mini, mini->lo->cmdline[i].cmd);
+			remove_path(mini, mini->lo->cmdline[i].cmd, e_key, e_val);
 	}
 	return (0);
 }

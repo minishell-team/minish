@@ -3,32 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mac <marvin@42.fr>                         +#+  +:+       +#+        */
+/*   By: jjeong <jjeong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/07/11 19:06:28 by mac               #+#    #+#             */
-/*   Updated: 2020/07/15 20:42:58 by djeon            ###   ########.fr       */
+/*   Created: 2021/05/06 03:42:28 by jjeong            #+#    #+#             */
+/*   Updated: 2021/05/10 04:31:02 by jjeong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char		*ft_strmapi(char const *s, char (*f)(unsigned int, char))
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	unsigned int	len;
-	unsigned int	i;
-	char			*newstr;
+	size_t	idx;
+	size_t	len;
+	char	*str;
 
-	if (s == 0 || f == 0)
+	if (s == NULL)
 		return (NULL);
+	idx = 0;
 	len = ft_strlen(s);
-	if (!(newstr = (char *)malloc(sizeof(char) * (len + 1))))
+	str = ft_calloc(len + 1, sizeof(char));
+	if (str == NULL)
 		return (NULL);
-	i = 0;
-	while (s[i])
+	while (idx < len)
 	{
-		newstr[i] = f(i, s[i]);
-		i++;
+		str[idx] = (*f)(idx, s[idx]);
+		idx++;
 	}
-	newstr[i] = '\0';
-	return (newstr);
+	str[idx] = '\0';
+	return (str);
 }

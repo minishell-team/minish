@@ -1,29 +1,51 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jjeong <jjeong@gmail.com>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/05/06 03:36:12 by jjeong            #+#    #+#             */
+/*   Updated: 2021/12/06 20:21:34 by jjeong           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
-int	ft_atoi(const char *str)
+int	ft_is_number(char c)
 {
-	int	i;
-	int	n;
-	int	count_minus;
+	return (c >= '0' && c <= '9');
+}
 
-	i = 0;
-	while (str[i] == '\t' || str[i] == '\n' || str[i] == '\r'
-		|| str[i] == '\v' || str[i] == '\f' || str[i] == ' ')
-		i++;
-	count_minus = 0;
-	if (str[i] == '-' || str[i] == '+')
+int	ft_is_space(char c)
+{
+	return (c == ' ' || c == '\t' || c == '\n' \
+		|| c == '\r' || c == '\f' || c == '\v');
+}
+
+int	ft_atoi(char const *str)
+{
+	int			minus;
+	long long	total;
+
+	minus = 1;
+	total = 0;
+	while (ft_is_space(*str))
+		str++;
+	if (*str == '+' || *str == '-')
+		if (*(str++) == '-')
+			minus *= -1;
+	while (ft_is_number(*str))
 	{
-		if (str[i] == '-')
-			count_minus = 1;
-		i++;
+		total *= 10;
+		total += *(str++) - '0';
 	}
-	n = 0;
-	while (str[i] >= '0' && str[i] <= '9')
+	if (total < 0)
 	{
-		n = n * 10 + str[i] - '0';
-		i++;
+		if (minus < 0)
+			return (0);
+		else
+			return (-1);
 	}
-	if (count_minus > 0)
-		n = n * (-1);
-	return (n);
+	return (total * minus);
 }

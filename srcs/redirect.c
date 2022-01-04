@@ -2,12 +2,12 @@
 
 int	check_redirect_target(t_token *token)
 {
-	if(token->cmd == NULL)
+	if (token->cmd == NULL)
 	{
 		alert_redirect_error("", 258);
 		return (FAIL);
 	}
-	else if(token->redir_flag == 1)
+	else if (token->redir_flag == 1)
 	{
 		alert_redirect_error(token->cmd, 258);
 		return (FAIL);
@@ -17,7 +17,7 @@ int	check_redirect_target(t_token *token)
 
 int	left_way_handler(t_minishell *mini, int i)
 {
-	int oflag;
+	int	oflag;
 	int	test_fd;
 
 	oflag = O_RDONLY;
@@ -38,7 +38,7 @@ int	left_way_handler(t_minishell *mini, int i)
 	return (SUCCESS);
 }
 
-int right_way_handler(t_minishell *mini, int i)
+int	right_way_handler(t_minishell *mini, int i)
 {
 	int	oflag;
 	int	test_fd;
@@ -49,9 +49,9 @@ int right_way_handler(t_minishell *mini, int i)
 	mini->lo->redirect_filename[2] = mini->lo->cmdline[i].cmd;
 	mini->lo->redirect_filename[3] = mini->lo->cmdline[i + 1].cmd;
 	test_fd = -1;
-	if(ft_strncmp(">", mini->lo->cmdline[i].cmd, 2) == 0)
+	if (ft_strncmp(">", mini->lo->cmdline[i].cmd, 2) == 0)
 		test_fd = open(mini->lo->cmdline[i + 1].cmd, oflag | O_TRUNC, 0644);
-	else if(ft_strncmp(">>", mini->lo->cmdline[i].cmd, 3) == 0)
+	else if (ft_strncmp(">>", mini->lo->cmdline[i].cmd, 3) == 0)
 		test_fd = open(mini->lo->cmdline[i + 1].cmd, oflag | O_APPEND, 0644);
 	if (test_fd < 1)
 	{
@@ -62,7 +62,7 @@ int right_way_handler(t_minishell *mini, int i)
 	return (SUCCESS);
 }
 
-int way_check(t_token *tk, char c)
+int	way_check(t_token *tk, char c)
 {
 	if (c == '>')
 	{
@@ -103,7 +103,7 @@ int	redirect_handler(t_minishell *mini, int **pipe_fd)
 			if (right_way_handler(mini, i) == FAIL)
 				return (ERROR);
 	}
-	if(mini->lo->redirect_filename[0] || mini->lo->redirect_filename[2])
+	if (mini->lo->redirect_filename[0] || mini->lo->redirect_filename[2])
 		return (do_redirect(mini->lo, pipe_fd));
 	return (0);
 }

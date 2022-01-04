@@ -2,7 +2,7 @@
 
 int	check_flag(t_minishell *mini)
 {
-	int i;
+	int	i;
 
 	mini->lo->right_flag = 0;
 	i = -1;
@@ -17,7 +17,7 @@ int	check_flag(t_minishell *mini)
 	return (SUCCESS);
 }
 
-void alert_redirect_error(char *str, int exit_code)
+void	alert_redirect_error(char *str, int exit_code)
 {
 	g_exit = exit_code;
 	if (str == NULL)

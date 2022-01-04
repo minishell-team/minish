@@ -3,19 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstadd_front.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djeon <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: jjeong <jjeong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/07/15 21:04:33 by djeon             #+#    #+#             */
-/*   Updated: 2020/07/23 22:13:21 by mac              ###   ########.fr       */
+/*   Created: 2021/05/06 03:39:48 by jjeong            #+#    #+#             */
+/*   Updated: 2021/05/06 23:39:05 by jjeong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstadd_front(t_list **lst, t_list *new1)
+void	ft_lstadd_front(t_list **lst, t_list *new)
 {
-	if (lst == NULL || new1 == NULL)
-		return ;
-	new1->next = *lst;
-	*lst = new1;
+	new->next = *lst;
+	*lst = new;
 }

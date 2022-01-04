@@ -3,75 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mac <marvin@42.fr>                         +#+  +:+       +#+        */
+/*   By: jjeong <jjeong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/07/09 12:38:03 by mac               #+#    #+#             */
-/*   Updated: 2020/08/19 21:05:41 by djeon            ###   ########.fr       */
+/*   Created: 2021/05/06 03:42:51 by jjeong            #+#    #+#             */
+/*   Updated: 2021/05/11 02:51:12 by jjeong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		cmp_set(char const c, char const *set)
-{
-	char	tmp1;
-	char	*tmp2;
-	int		i;
-
-	tmp1 = (char)c;
-	tmp2 = (char*)set;
-	i = 0;
-	while (tmp2[i] != '\0')
-	{
-		if (tmp1 == tmp2[i])
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-int		start_and_end(char const *str, char const *set, int tmp)
-{
-	int		i;
-
-	if (tmp == 1)
-	{
-		i = 0;
-		while (cmp_set(str[i], set) && str[i] != '\0')
-			i++;
-	}
-	else
-	{
-		i = ft_strlen(str) - 1;
-		while (cmp_set(str[i], set))
-			i--;
-	}
-	return (i);
-}
-
 char	*ft_strtrim(char const *s1, char const *set)
 {
-	char	*tmp1;
-	char	*result;
-	int		i;
-	int		j;
-	int		a;
+	size_t	idx;
+	char	*head;
+	char	*foot;
+	char	*dyn_alc;
 
-	tmp1 = (char*)s1;
-	i = start_and_end(tmp1, set, 1);
-	a = 0;
-	if (tmp1[i] == '\0')
-	{
-		if (!(result = (char*)malloc(1)))
-			return (0);
-		result[0] = 0;
-		return (result);
-	}
-	j = start_and_end(tmp1, set, -1);
-	if (!(result = (char*)malloc(j - i + 2)))
-		return (0);
-	while (i <= j)
-		result[a++] = tmp1[i++];
-	result[a] = '\0';
-	return (result);
+	if (s1 == NULL || set == NULL)
+		return (NULL);
+	idx = 0;
+	while (*s1 != '\0' && ft_strchr(set, *s1) != NULL)
+		s1++;
+	head = (char *)s1;
+	if (*head == '\0')
+		return (ft_strdup(""));
+	while (*s1 != '\0')
+		s1++;
+	s1--;
+	while (ft_strchr(set, *s1) != NULL)
+		s1--;
+	foot = (char *)s1;
+	dyn_alc = (char *)malloc((foot - head + 2) * sizeof(char));
+	if (dyn_alc == NULL)
+		return (NULL);
+	ft_memcpy(dyn_alc, head, (foot - head + 2));
+	dyn_alc[foot - head + 1] = '\0';
+	return (dyn_alc);
 }

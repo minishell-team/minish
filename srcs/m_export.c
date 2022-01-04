@@ -1,55 +1,61 @@
 #include "../includes/minishell.h"
 
-void	make_new_export_space(t_minishell *mini, char ***temp, char ***temp2)
+int	make_new_export_space(char ***temp, char ***temp2, char ***env_key)
 {
-	*temp = (char **)malloc(sizeof(char *) * (mini->len + 2));
+	int	len;
+
+	len = 0;
+	while ((*env_key)[len] != NULL)
+		len += 1;
+	*temp = (char **)malloc(sizeof(char *) * (len + 2));
 	if (*temp == NULL)
-		exit_clean(mini, EXIT_FAILURE);
-	*temp2 = (char **)malloc(sizeof(char *) * (mini->len + 2));
+		return (ERROR);
+	*temp2 = (char **)malloc(sizeof(char *) * (len + 2));
 	if (*temp2 == NULL)
 	{
 		free(*temp);
-		exit_clean(mini, EXIT_FAILURE);
+		return (ERROR);
 	}
+	return (SUCCESS);
 }
 
-void	enrol_env(t_minishell *mini, char *new_key, char *new_value)
+int	enrol_env(char *new_key, char *new_value, char ***env_key, char ***env_val)
 {
 	char	**temp;
 	char	**temp2;
 	int		i;
 
-	if (check_unique_key(mini, new_key, new_value) == FAIL)
-		return ;
-	make_new_export_space(mini, &temp, &temp2);
+	if (make_new_export_space(&temp, &temp2, env_key) == ERROR)
+		return (ERROR);
 	i = -1;
-	while (++i < mini->len)
+	while ((*env_key)[++i])
 	{
-		temp[i] = mini->key[i];
-		temp2[i] = mini->content[i];
+		temp[i] = (*env_key)[i];
+		temp2[i] = (*env_val)[i];
 	}
 	temp[i] = new_key;
 	temp2[i++] = new_value;
 	temp[i] = NULL;
 	temp2[i] = NULL;
-	free(mini->key);
-	free(mini->content);
-	mini->key = temp;
-	mini->content = temp2;
-	mini->len += 1;
+	free(*env_key);
+	free(*env_val);
+	*env_key = temp;
+	*env_val = temp2;
+	return (SUCCESS);
 }
 
-void	add_path(t_minishell *mini, char *str, char *chr)
+int	add_path(t_minishell *mini, char *str, char ***e_key, char ***e_val)
 {
 	char	*key;
 	char	*value;
 	char	**arr;
+	char	*chr;
 
+	chr = ft_strchr(&str[1], '=');
+	if (chr == NULL)
+		return (FAIL);
 	if (key_check_str(str, '=') == FAIL)
-	{
-		alert_export_error("export", str);
-		return ;
-	}
+		return (alert_export_error("export", str));
 	arr = ft_split(str, '=');
 	if (arr == NULL)
 		exit_clean(mini, EXIT_FAILURE);
@@ -58,13 +64,17 @@ void	add_path(t_minishell *mini, char *str, char *chr)
 	value = ft_strdup(chr + 1);
 	if (value == NULL)
 		exit_clean(mini, EXIT_FAILURE);
-	enrol_env(mini, key, value);
+	if (check_unique_key(mini, key, value) == FAIL)
+		return (FAIL);
+	if (enrol_env(key, value, e_key, e_val) == ERROR)
+		exit_clean(mini, EXIT_FAILURE);
+	mini->len += 1;
+	return (SUCCESS);
 }
 
-int	mini_export(t_minishell *mini, int fd_out)
+int	mini_export(t_minishell *mini, int fd_out, char ***e_key, char ***e_val)
 {
 	int		i;
-	char	*chr;
 
 	g_exit = 0;
 	i = 0;
@@ -75,10 +85,7 @@ int	mini_export(t_minishell *mini, int fd_out)
 			alert_export_error("export", mini->lo->cmdline[i].cmd);
 			continue ;
 		}
-		chr = ft_strchr(&mini->lo->cmdline[i].cmd[1], '=');
-		if (chr == NULL)
-			continue ;
-		add_path(mini, mini->lo->cmdline[i].cmd, chr);
+		add_path(mini, mini->lo->cmdline[i].cmd, e_key, e_val);
 	}
 	if ((mini->lo->cmdline[1].cmd) == NULL)
 		show_declare_x(mini, fd_out);

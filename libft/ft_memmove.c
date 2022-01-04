@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mac <marvin@42.fr>                         +#+  +:+       +#+        */
+/*   By: jjeong <jjeong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/06/30 21:49:59 by mac               #+#    #+#             */
-/*   Updated: 2020/07/27 21:22:29 by djeon            ###   ########.fr       */
+/*   Created: 2021/05/06 03:41:05 by jjeong            #+#    #+#             */
+/*   Updated: 2021/05/11 02:52:07 by jjeong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,20 @@
 
 void	*ft_memmove(void *dst, const void *src, size_t len)
 {
-	char	*srcc;
-	char	*dstc;
-	size_t	i;
+	void	*addr;
+	int		way;
 
-	i = 0;
-	srcc = (char *)src;
-	dstc = (char *)dst;
-	if (!dst && !src)
-		return (0);
-	if (srcc < dstc)
-		while (len > 0)
-		{
-			*(dstc + len - 1) = *(srcc + len - 1);
-			len--;
-		}
-	else
-		while (i < len)
-		{
-			*(dstc + i) = *(srcc + i);
-			i++;
-		}
-	return (dst);
+	addr = dst;
+	way = 1 - (2 * (dst > src));
+	if (dst == NULL && src == NULL)
+		return (NULL);
+	dst += (way == -1) * (len - 1);
+	src += (way == -1) * (len - 1);
+	while (len-- > 0)
+	{
+		*(unsigned char *)dst = *(unsigned char *)src;
+		dst += way;
+		src += way;
+	}
+	return (addr);
 }

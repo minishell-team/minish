@@ -1,6 +1,6 @@
 #include "../includes/minishell.h"
 
-void	alert_export_error(char *cmd, char *key)
+int	alert_export_error(char *cmd, char *key)
 {
 	ft_putstr_fd("minishell: ", STDOUT);
 	ft_putstr_fd(cmd, STDOUT);
@@ -8,6 +8,7 @@ void	alert_export_error(char *cmd, char *key)
 	ft_putstr_fd(key, STDOUT);
 	ft_putendl_fd("': not a valid identifier", STDOUT);
 	g_exit = 1;
+	return (FAIL);
 }
 
 void	show_declare_x(t_minishell *mini, int fd_out)

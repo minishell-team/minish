@@ -3,127 +3,69 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sejpark <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: jjeong <jjeong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/07/07 15:33:09 by sejpark           #+#    #+#             */
-/*   Updated: 2021/06/30 16:34:31 by djeon            ###   ########.fr       */
+/*   Created: 2021/05/06 03:41:45 by jjeong            #+#    #+#             */
+/*   Updated: 2021/12/06 20:12:16 by jjeong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		ft_split_cnt(char const *s, const char c)
+void	free_arr_all(char **arr, size_t cnt)
 {
-	int cnt;
-	int begin;
-
-	cnt = 0;
-	begin = 0;
-	while (*s)
-	{
-		if (begin == 0)
-		{
-			if (*s != c)
-				begin = 1;
-		}
-		else
-		{
-			if (*s == c)
-			{
-				begin = 0;
-				cnt++;
-			}
-		}
-		s++;
-	}
-	return (begin == 0 ? cnt : cnt + 1);
+	while (cnt-- != 0)
+		free(arr[cnt]);
 }
 
-int		ft_word_len(char const *s, const char c)
+void	word_fill(char const *s, char c, char **arr, size_t cnt)
 {
-	int len;
-	int begin;
+	size_t	len;
+	size_t	idx;
 
+	if (*s == '\0')
+		return ;
+	if (*s == c)
+		return (word_fill(s + 1, c, arr, cnt));
 	len = 0;
-	begin = 0;
-	while (*s)
+	while (*(s + len) != c && *(s + len) != '\0')
+		len++;
+	arr[cnt] = (char *)malloc((len + 1) * sizeof(char));
+	if (arr[cnt] == NULL)
+		return (free_arr_all(arr, cnt));
+	idx = 0;
+	while (idx < len)
 	{
-		if (begin == 0)
-		{
-			if (*s != c)
-			{
-				begin = 1;
-				len++;
-			}
-		}
-		else
-		{
-			if (*s == c)
-				break ;
-			else
-				len++;
-		}
+		arr[cnt][idx] = s[idx];
+		idx++;
+	}
+	arr[cnt][len] = '\0';
+	word_fill(s + len, c, arr, cnt + 1);
+}
+
+size_t	word_count(char const *s, char c, size_t count)
+{
+	if (*s == '\0')
+		return (count);
+	if (*s == c)
+		return (word_count(s + 1, c, count));
+	while (*s != c && *s != '\0')
 		s++;
-	}
-	return (len);
-}
-
-char	*ft_alloc_word(int *idx, char const *s, const char c)
-{
-	int		word_len;
-	char	*word;
-	int		i;
-
-	word_len = ft_word_len(&s[*idx], c);
-	word = (char*)malloc(sizeof(char) + (word_len + 1));
-	if (word == NULL)
-		return (NULL);
-	i = 0;
-	while (i < word_len)
-	{
-		word[i] = s[*idx + i];
-		i++;
-	}
-	word[i] = '\0';
-	*idx += word_len;
-	return (word);
-}
-
-void	*ft_free(char **result, int len)
-{
-	int i;
-
-	i = 0;
-	while (i < len)
-		free(result[i++]);
-	return (NULL);
+	return (word_count(s, c, count + 1));
 }
 
 char	**ft_split(char const *s, char c)
 {
-	int		i;
-	int		cursor;
-	char	**result;
+	size_t	count;
+	char	**arr;
 
 	if (s == NULL)
 		return (NULL);
-	i = 0;
-	cursor = 0;
-	result = (char**)malloc(sizeof(char*) * (ft_split_cnt(s, c) + 1));
-	if (result == NULL)
+	count = word_count(s, c, 0);
+	arr = (char **)malloc((count + 1) * sizeof(char *));
+	if (arr == NULL)
 		return (NULL);
-	while (s[cursor])
-	{
-		if (s[cursor] == c)
-			cursor++;
-		else
-		{
-			result[i] = ft_alloc_word(&cursor, s, c);
-			if (result[i] == NULL)
-				return (ft_free(result, i));
-			i++;
-		}
-	}
-	result[i] = 0;
-	return (result);
+	word_fill(s, c, arr, 0);
+	arr[count] = NULL;
+	return (arr);
 }

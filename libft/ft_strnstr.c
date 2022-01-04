@@ -3,57 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djeon <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: jjeong <jjeong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/06/03 13:11:16 by djeon             #+#    #+#             */
-/*   Updated: 2020/07/08 12:48:56 by mac              ###   ########.fr       */
+/*   Created: 2021/05/06 03:42:39 by jjeong            #+#    #+#             */
+/*   Updated: 2021/05/10 21:25:26 by jjeong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int			ft_all_match(char *str, char *to_find, int to_find_len)
+char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 {
-	int index;
+	size_t	idx;
+	size_t	cnt;
+	size_t	len_needle;
 
-	index = 0;
-	while (index < to_find_len)
-	{
-		if (str[index] == to_find[index])
-		{
-			index++;
-			if (index == to_find_len)
-				return (1);
-		}
-		else
-			return (0);
-	}
-	return (0);
-}
-
-char		*ft_strnstr(const char *str, const char *to_find, size_t len)
-{
-	size_t	to_find_len;
-	size_t	index;
-	size_t	j;
-
-	to_find_len = 0;
-	index = 0;
-	while (to_find[to_find_len] != '\0')
-		to_find_len++;
-	if (to_find_len == 0)
-		return ((char*)str);
+	if (*needle == '\0')
+		return ((char *)haystack);
 	if (len == 0)
-		return (0);
-	while (str[index] != '\0' && index <= len - to_find_len)
+		return (NULL);
+	len_needle = ft_strlen(needle);
+	idx = 0;
+	while (*haystack != '\0' && idx < len)
 	{
-		if (str[index] == to_find[0])
-		{
-			j = ft_all_match((char*)&str[index], (char*)to_find, to_find_len);
-			if (j == 1)
-				return ((char*)&str[index]);
-		}
-		index++;
+		cnt = 0;
+		while (needle[cnt] != '\0' && \
+				haystack[cnt] == needle[cnt] && (idx + cnt < len))
+			cnt++;
+		if (cnt == len_needle)
+			return ((char *)haystack);
+		haystack++;
+		idx++;
 	}
-	return (0);
+	return (NULL);
 }

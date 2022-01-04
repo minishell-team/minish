@@ -5,7 +5,7 @@ void	write_args(t_token *token, int option_n, int fd_out)
 	int	i;
 
 	i = -1;
-	while (1) 
+	while (1)
 	{
 		if (token[++i].cmd && token[i].redir_flag == 0)
 		{

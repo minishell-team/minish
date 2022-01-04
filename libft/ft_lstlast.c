@@ -3,23 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstlast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djeon <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: jjeong <jjeong@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/07/15 21:25:58 by djeon             #+#    #+#             */
-/*   Updated: 2021/05/25 19:34:29 by djeon            ###   ########.fr       */
+/*   Created: 2021/05/06 03:40:09 by jjeong            #+#    #+#             */
+/*   Updated: 2021/05/06 17:17:32 by jjeong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_list		*ft_lstlast(t_list *lst)
+t_list	*ft_lstlast(t_list *lst)
 {
-	t_list	*tmp;
-
-	tmp = lst;
-	if (tmp == NULL)
-		return (0);
-	while (tmp->next != NULL)
-		tmp = tmp->next;
-	return (tmp);
+	while (lst)
+	{
+		if (lst->next == NULL)
+			break ;
+		lst = lst->next;
+	}
+	return (lst);
 }

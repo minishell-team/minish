@@ -47,9 +47,9 @@ void	exit_minishell(t_minishell *mini)
 	exit_clean(mini, ft_atoi(mini->lo->cmdline[1].cmd) % 256);
 }
 
-int mini_exit(t_minishell *mini)
+int	mini_exit(t_minishell *mini)
 {
-	int i;
+	int	i;
 
 	if (mini->lo->exit_flag == 1)
 		exit_minishell(mini);

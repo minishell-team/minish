@@ -5,7 +5,7 @@ void	alert_cd_error(char *str, int exit_code, int wave_ascii)
 	g_exit = exit_code;
 	if (wave_ascii == 1)
 	{
-		ft_putendl_fd("minishell: cd: HOME not set\n", STDOUT);
+		ft_putendl_fd("minishell: cd: HOME not set", STDOUT);
 		return ;
 	}
 	ft_putstr_fd("minishell: cd: ", STDOUT);
@@ -54,7 +54,7 @@ int	cd_to_home(t_minishell *mini, int wave_ascii)
 	}
 	if (home_path == NULL)
 		alert_cd_error("", 1, 1);
-	if (chdir(home_path) == ERROR)
+	else if (chdir(home_path) == ERROR)
 		alert_cd_error(home_path, 1, wave_ascii);
 	return (0);
 }

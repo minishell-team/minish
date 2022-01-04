@@ -30,7 +30,7 @@ int	double_left_redirect(t_linked_order *order, int **pipe_fd)
 		line = readline("> ");
 		if (ft_strncmp(line, syntax, syn_len + 1) == 0)
 		{
-			free(line);	
+			free(line);
 			break ;
 		}
 		ft_putendl_fd(line, (*pipe_fd)[1]);
@@ -79,8 +79,8 @@ int	double_right_redirect(t_linked_order *order)
 
 int	do_redirect(t_linked_order *order, int **pipe_fd)
 {
-	int left_status;
-	int right_status;
+	int	left_status;
+	int	right_status;
 
 	left_status = 0;
 	right_status = 0;
