@@ -1,6 +1,6 @@
 #include "../includes/minishell.h"
 
-int mini_env(t_minishell *mini, int fd_out)
+int	mini_env(t_minishell *mini, int fd_out)
 {
 	int	i;
 

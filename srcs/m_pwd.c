@@ -1,6 +1,6 @@
 #include "../includes/minishell.h"
 
-int mini_pwd(int fd_out)
+int	mini_pwd(int fd_out)
 {
 	char	*path;
 

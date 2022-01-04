@@ -1,15 +1,15 @@
 #include "../includes/minishell.h"
 
-int alert_path_error(char *cmd)
+int	alert_path_error(char *cmd)
 {
 	ft_putstr_fd("minishell: ", STDOUT);
-    ft_putstr_fd(cmd, STDOUT);
-    ft_putendl_fd(": No such file or directory", STDOUT);
-    g_exit = 127;
-    return (0);
+	ft_putstr_fd(cmd, STDOUT);
+	ft_putendl_fd(": No such file or directory", STDOUT);
+	g_exit = 127;
+	return (0);
 }
 
-char    *trans_abs_path(t_minishell *mini, char *path, char *cmd)
+char	*trans_abs_path(t_minishell *mini, char *path, char *cmd)
 {
 	char	*temp;
 	char	*temp2;
@@ -54,28 +54,28 @@ int	try_paths_exec(t_minishell *mini, char **paths, int *pipe_fd)
 		free(abs_path);
 	}
 	paths_free(paths);
-	return(alert_path_error(mini->lo->cmdline[0].cmd));
+	return (alert_path_error(mini->lo->cmdline[0].cmd));
 }
 
-int extern_func_exec(t_minishell *mini, int *pipe_fd)
+int	extern_func_exec(t_minishell *mini, int *pipe_fd)
 {
-	struct stat buf;
+	struct stat	buf;
 	char		**paths;
-    int         path_index;
+	int			path_index;
 
-    g_exit = 0;
-    if (mini->lo->cmdline[0].cmd[0] == '\0')
-        return(alert_path_error(""));
+	g_exit = 0;
+	if (mini->lo->cmdline[0].cmd[0] == '\0')
+		return (alert_path_error(""));
 	if (stat(mini->lo->cmdline[0].cmd, &buf) == 0)
 		system_call_exec(mini, mini->lo->cmdline[0].cmd, pipe_fd);
 	else
 	{
-        path_index = find_env(mini, "PATH");
-        if (path_index == -1)
-            return(alert_path_error(mini->lo->cmdline[0].cmd));
-        paths = ft_split(mini->content[path_index], ':');
-        if (paths == NULL)
-            exit_clean(mini, EXIT_FAILURE);
+		path_index = find_env(mini, "PATH");
+		if (path_index == -1)
+			return (alert_path_error(mini->lo->cmdline[0].cmd));
+		paths = ft_split(mini->content[path_index], ':');
+		if (paths == NULL)
+			exit_clean(mini, EXIT_FAILURE);
 		return (try_paths_exec(mini, paths, pipe_fd));
 	}
 	return (0);

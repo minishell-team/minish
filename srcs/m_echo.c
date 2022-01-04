@@ -22,26 +22,26 @@ void	write_args(t_token *token, int option_n, int fd_out)
 	}
 }
 
-int mini_echo(t_minishell *mini, int fd_out)
+int	mini_echo(t_minishell *mini, int fd_out)
 {
-	int option_n;
-	int i;
-    int j;
+	int	option_n;
+	int	i;
+	int	j;
 
 	g_exit = 0;
 	option_n = 0;
-    i = 0;
+	i = 0;
 	while (mini->lo->cmdline[++i].cmd)
 	{
 		if (mini->lo->cmdline[i].cmd[0] != '-')
-            break ;
+			break ;
 		if (mini->lo->cmdline[i].cmd[1] != 'n')
-            break ;
-        j = 0;
-        while (mini->lo->cmdline[i].cmd[++j])
-            if((mini->lo->cmdline[i].cmd[j]) != 'n')
-                break ;
-        option_n = 1;
+			break ;
+		j = 0;
+		while (mini->lo->cmdline[i].cmd[++j])
+			if ((mini->lo->cmdline[i].cmd[j]) != 'n')
+				break ;
+		option_n = 1;
 	}
 	write_args(&mini->lo->cmdline[i], option_n, fd_out);
 	return (0);

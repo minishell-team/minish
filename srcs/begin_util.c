@@ -19,9 +19,9 @@ void	free_all_list(t_linked_order *order)
 	t_linked_order		*tmp;
 	t_linked_order		*next;
 	int					i;
-	
+
 	tmp = order;
-	while(tmp)
+	while (tmp)
 	{
 		next = tmp->next;
 		i = 0;
@@ -51,7 +51,7 @@ void	free_linked_order(t_minishell *mini)
 {
 	t_linked_order		*next;
 	int					i;
-	
+
 	if (mini->lo == NULL)
 		return ;
 	next = mini->lo->next;
@@ -63,26 +63,26 @@ void	free_linked_order(t_minishell *mini)
 	mini->lo = next;
 }
 
-void    ascii_art(void)
+void	ascii_art(void)
 {
-    int random;
+	int	random;
 
-    random = (int)(long long)&random;
-    if (random % 3)
-    {
-        printf("%s\
-        ───▄▀▀▀▄▄▄▄▄▄▄▀▀▀▄───\n\
-        ───█▒▒░░░░░░░░░▒▒█─── minishell\n\
-        ────█░░█░░░░░█░░█──── made by\n\
-        ─▄▄──█░░░▀█▀░░░█──▄▄─ jjeong seungyki\n\
-        █░░█─▀▄░░░░░░░▄▀─█░░█%s\n", SKY, WHITE);
-    }
-    else
-    {
-        printf("%s\
-        ──────▄▀▄─────▄▀▄	minishell\n\
-        ─────▄█░░▀▀▀▀▀░░█▄	made by\n\
-        ─▄▄──█░░░░░░░░░░░█──▄▄	jjeong seungyki\n\
-        █▄▄█─█░░▀░░┬░░▀░░█─█▄▄█%s\n", SKY, WHITE);
-    }
+	random = (int)(long long)&random;
+	if (random % 3)
+	{
+		printf("%s\
+		───▄▀▀▀▄▄▄▄▄▄▄▀▀▀▄───\n\
+		───█▒▒░░░░░░░░░▒▒█─── minishell\n\
+		────█░░█░░░░░█░░█──── made by\n\
+		─▄▄──█░░░▀█▀░░░█──▄▄─ jjeong seungyki\n\
+		█░░█─▀▄░░░░░░░▄▀─█░░█%s\n", SKY, WHITE);
+	}
+	else
+	{
+		printf("%s\
+		──────▄▀▄─────▄▀▄	minishell\n\
+		─────▄█░░▀▀▀▀▀░░█▄	made by\n\
+		─▄▄──█░░░░░░░░░░░█──▄▄	jjeong seungyki\n\
+		█▄▄█─█░░▀░░┬░░▀░░█─█▄▄█%s\n", SKY, WHITE);
+	}
 }

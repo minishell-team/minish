@@ -3,7 +3,7 @@
 int	exit_pipe_error(void)
 {
 	ft_putstr_fd("minishell: ", STDOUT);
-    ft_putendl_fd("syntax error near unexpected token `|'", STDOUT);
+	ft_putendl_fd("syntax error near unexpected token `|'", STDOUT);
 	g_exit = 258;
 	return (ERROR);
 }
