@@ -127,4 +127,18 @@ void	parse(t_minishell *mini, char *line)
 			val.prev = val.move + 1;
 		}
 	}
+	t_linked_order *list;
+	t_token *token;
+	list = mini->lo;
+	while(list)
+	{
+		token = list->cmdline;
+		while(token->cmd)
+		{
+			printf("token : [%s]\n",token->cmd);
+			token++;
+		}
+		printf("pipe flag : [%d] exit flag : [%d]\n\n", list->pipe_flag, list->exit_flag);
+		list = list->next;
+	}
 }

@@ -81,10 +81,7 @@ int	main(int argc, char **argv, char **envp)
 				mini.error = 0;
 				add_history(line);
 				parse(&mini, line);
-				if (!mini.error)
-					g_exit = exec(&mini);
-				else
-					printf("quote is not closed!\n");
+				g_exit = exec(&mini);
 				free_all_list(mini.lo);
 			}
 			free(line);

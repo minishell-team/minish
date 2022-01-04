@@ -89,25 +89,11 @@ int	rebuild_cmd(char *src, char *dest, t_minishell *mini)
 		{
 			if (!single_quote(mini, src, &dest_end, &src_move))
 				return (0);
-			// if (unclosed(&src[src_move], '\''))
-			// 	src_move += single_cpy(&src[src_move], &dest_end);
-			// else
-			// {
-			// 	mini->error = 1;
-			// 	return (0);
-			// }
 		}
 		else if (src[src_move] == '\"')
 		{
 			if (!double_quote(mini, src, &dest_end, &src_move))
 				return (0);
-			// if (unclosed(&src[src_move], '\"'))
-			// 	src_move += double_cpy(&src[src_move], &dest_end, mini);
-			// else
-			// {
-			// 	mini->error = 1;
-			// 	return (0);
-			// }
 		}
 		else if (src[src_move] == '$')
 			src_move += env_cpy(&src[src_move], &dest_end, mini);

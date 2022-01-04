@@ -73,6 +73,8 @@ t_token	*rebuild_token(t_minishell *mini, t_token *token)
 	i = -1;
 	while (token[++i].cmd)
 	{
+		if (mini->error)
+			break ;
 		cmd_len = 0;
 		tmp_cmd = token[i].cmd;
 		cmd_len = rebuild_size(tmp_cmd, mini);
@@ -87,6 +89,7 @@ t_token	*rebuild_token(t_minishell *mini, t_token *token)
 		if (!rebuild_cmd(tmp_cmd, token[i].cmd, mini))
 		{
 			free(tmp_cmd);
+			destroy_token(&token[i]);
 			break ;
 		}
 		free(tmp_cmd);

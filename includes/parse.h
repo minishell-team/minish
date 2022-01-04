@@ -24,6 +24,7 @@ void	reset_add(t_gss *val);
 void	gss_init(t_gss *val);
 void	parse_init(t_parse *val, t_minishell *mini);
 void	free_key_value(t_minishell *mini);
+void	destroy_token(t_token *token);
 int		rebuild_cmd(char *src, char *dest, t_minishell *mini);
 int		ft_strcmp(const char *a, const char *b);
 int		get_split_size(const char *s, const char c);
