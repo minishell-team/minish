@@ -28,7 +28,6 @@ void	free_all_list(t_linked_order *order)
 		while (tmp->cmdline[i].cmd != NULL)
 			free(tmp->cmdline[i++].cmd);
 		free(tmp->cmdline);
-		free(tmp->err_manage.errtoken);
 		free(tmp);
 		tmp = next;
 	}
@@ -60,7 +59,6 @@ void	free_linked_order(t_minishell *mini)
 	while (mini->lo->cmdline[i].cmd != NULL)
 		free(mini->lo->cmdline[i++].cmd);
 	free(mini->lo->cmdline);
-	free(mini->lo->err_manage.errtoken);
 	free(mini->lo);
 	mini->lo = next;
 }

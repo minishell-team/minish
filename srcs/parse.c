@@ -71,9 +71,6 @@ t_linked_order	*create_node(t_minishell *mini, char *line, \
 		node->exit_flag = 1;
 	else
 		node->exit_flag = 0;
-	node->err_manage.errcode = 0;
-	node->err_manage.errindex = 0;
-	node->err_manage.errtoken = NULL;
 	node->next = NULL;
 	return (node);
 }
