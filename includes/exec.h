@@ -25,6 +25,7 @@ void        alert_export_error(char *cmd, char *key);
 void        show_declare_x(t_minishell *mini, int fd_out);
 int         key_check_char(char c);
 int         key_check_str(char *str, char eof);
+void        free_trash(char **arr);
 
 int         exec(t_minishell *mini);
 int         redirect_handler(t_minishell *mini, int **pipe_fd);

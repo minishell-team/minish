@@ -49,3 +49,13 @@ int    key_check_str(char *str, char eof)
     }
     return (SUCCESS);
 }
+
+void    free_trash(char **arr)
+{
+    int i;
+
+    i = 0;
+    while (arr[++i] != NULL)
+        free(arr[i]);
+    free(arr);
+}

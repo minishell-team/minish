@@ -1,13 +1,16 @@
 #include "../includes/minishell.h"
 
-void    free_trash(char **arr)
+void    make_new_export_space(t_minishell *mini, char ***temp, char ***temp2)
 {
-    int i;
-
-    i = 0;
-    while (arr[++i] != NULL)
-        free(arr[i]);
-    free(arr);
+    *temp = (char **)malloc(sizeof(char *) * (mini->len + 2));
+    if (*temp == NULL)
+        exit_clean(mini, EXIT_FAILURE);
+    *temp2 = (char **)malloc(sizeof(char *) * (mini->len + 2));
+    if (*temp2 == NULL)
+    {
+        free(*temp);
+        exit_clean(mini, EXIT_FAILURE);
+    }
 }
 
 void    enrol_env(t_minishell *mini, char *new_key, char *new_value)
@@ -15,16 +18,20 @@ void    enrol_env(t_minishell *mini, char *new_key, char *new_value)
     char        **temp;
     char        **temp2;
     int         i;
+    int         same_key_idx;
 
-    temp = (char **)malloc(sizeof(char *) * (mini->len + 2));
-    if (temp == NULL)
-        exit_clean(mini, EXIT_FAILURE);
-    temp2 = (char **)malloc(sizeof(char *) * (mini->len + 2));
-    if (temp2 == NULL)
-        exit_clean(mini, EXIT_FAILURE);
+    same_key_idx = find_env(mini, new_key);
+    if (same_key_idx != -1)
+    {
+        free(new_key);
+        free(mini->content[same_key_idx]);
+        mini->content[same_key_idx] = new_value;
+        return ;
+    }
+    make_new_export_space(mini, &temp, &temp2);
     i = -1;
     while (++i < mini->len)
-    {
+    { 
         temp[i] = mini->key[i];
         temp2[i] = mini->content[i];
     }
@@ -36,6 +43,7 @@ void    enrol_env(t_minishell *mini, char *new_key, char *new_value)
     free(mini->content);
     mini->key = temp;
     mini->content = temp2;
+    mini->len += 1;
 }
 
 void    add_path(t_minishell *mini, char *str, char *chr)
@@ -58,7 +66,6 @@ void    add_path(t_minishell *mini, char *str, char *chr)
     if (value == NULL)
         exit_clean(mini, EXIT_FAILURE);
     enrol_env(mini, key, value);
-    mini->len += 1;
 }
 
 int mini_export(t_minishell *mini, int fd_out)
