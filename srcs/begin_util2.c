@@ -33,3 +33,18 @@ char	*readline_with_path(void)
 	free(temp2);
 	return (curr_path);
 }
+
+int check_unique_key(t_minishell *mini, char *new_key, char *new_value)
+{
+    int same_key_idx;
+
+    same_key_idx = find_env(mini, new_key);
+    if (same_key_idx != -1)
+    {
+        free(new_key);
+        free(mini->content[same_key_idx]);
+        mini->content[same_key_idx] = new_value;
+        return (FAIL);
+    }
+    return (SUCCESS);
+}

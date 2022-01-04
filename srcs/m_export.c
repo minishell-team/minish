@@ -18,16 +18,9 @@ void    enrol_env(t_minishell *mini, char *new_key, char *new_value)
     char        **temp;
     char        **temp2;
     int         i;
-    int         same_key_idx;
 
-    same_key_idx = find_env(mini, new_key);
-    if (same_key_idx != -1)
-    {
-        free(new_key);
-        free(mini->content[same_key_idx]);
-        mini->content[same_key_idx] = new_value;
+    if (check_unique_key(mini, new_key, new_value) == FAIL)
         return ;
-    }
     make_new_export_space(mini, &temp, &temp2);
     i = -1;
     while (++i < mini->len)
