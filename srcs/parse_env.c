@@ -64,17 +64,13 @@ int	rebuild_size(char *str, t_minishell *mini)
 	return (size);
 }
 
-t_token	*rebuild_token(t_minishell *mini, t_token *token)
+t_token	*rebuild_token(t_minishell *mini, t_token *token, int i)
 {
-	int		i;
 	int		cmd_len;
 	char	*tmp_cmd;
 
-	i = -1;
-	while (token[++i].cmd)
+	while (token[++i].cmd && !mini->error)
 	{
-		if (mini->error)
-			break ;
 		cmd_len = 0;
 		tmp_cmd = token[i].cmd;
 		cmd_len = rebuild_size(tmp_cmd, mini);

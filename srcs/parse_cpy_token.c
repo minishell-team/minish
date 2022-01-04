@@ -85,14 +85,9 @@ int	rebuild_cmd(char *src, char *dest, t_minishell *mini)
 	dest_end = dest;
 	while (src[++src_move])
 	{
-		if (src[src_move] == '\'')
+		if (src[src_move] == '\'' || src[src_move] == '\"')
 		{
-			if (!single_quote(mini, src, &dest_end, &src_move))
-				return (0);
-		}
-		else if (src[src_move] == '\"')
-		{
-			if (!double_quote(mini, src, &dest_end, &src_move))
+			if (!quotes(mini, src, &dest_end, &src_move))
 				return (0);
 		}
 		else if (src[src_move] == '$')

@@ -2,11 +2,12 @@
 
 void	parse_init(t_parse *val, t_minishell *mini)
 {
-	val->move = -1;
-	val->close = 0;
+	val->m = -1;
+	val->c = 0;
 	val->end = 0;
 	val->prev = 0;
 	mini->lo = NULL;
+	mini->error = 0;
 }
 
 void	gss_init(t_gss *val)

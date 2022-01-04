@@ -78,7 +78,6 @@ int	main(int argc, char **argv, char **envp)
 		{
 			if (line[0] != '\0' && !chk_line(line))
 			{
-				mini.error = 0;
 				add_history(line);
 				parse(&mini, line);
 				g_exit = exec(&mini);

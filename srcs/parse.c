@@ -62,7 +62,7 @@ t_linked_order	*create_node(t_minishell *mini, char *line, \
 	if (!node)
 		return (0);
 	node->cmdline = cmd_split(line, ' ', 0, -1);
-	rebuild_token(mini, node->cmdline);
+	rebuild_token(mini, node->cmdline, -1);
 	if (val_end)
 		node->pipe_flag = 0;
 	else
@@ -100,20 +100,18 @@ void	parse(t_minishell *mini, char *line)
 	t_parse	val;
 
 	parse_init(&val, mini);
-	while (++val.move >= 0)
+	while (++val.m >= 0)
 	{
-		if ((line[val.move] == '\'' || line[val.move] == '\"') \
-			&& val.close == 0)
-			val.close = 1;
-		else if ((line[val.move] == '\'' || line[val.move] == '\"') \
-			&& val.close == 1)
-			val.close = 0;
-		if ((line[val.move] == '|' && val.close == 0) || line[val.move] == '\0')
+		if ((line[val.m] == '\'' || line[val.m] == '\"') && val.c == 0)
+			val.c = 1;
+		else if ((line[val.m] == '\'' || line[val.m] == '\"') && val.c == 1)
+			val.c = 0;
+		if ((line[val.m] == '|' && val.c == 0) || line[val.m] == '\0')
 		{
-			if (line[val.move] == '\0')
+			if (line[val.m] == '\0')
 				val.end = 1;
-			if (line[val.move] == '|')
-				line[val.move] = '\0';
+			if (line[val.m] == '|')
+				line[val.m] = '\0';
 			if (!insert_ls(mini, &line[val.prev], val.end, val.prev))
 			{
 				free_all_list(mini->lo);
@@ -121,21 +119,7 @@ void	parse(t_minishell *mini, char *line)
 			}
 			if (val.end)
 				break ;
-			val.prev = val.move + 1;
+			val.prev = val.m + 1;
 		}
 	}
-	// t_linked_order *list;
-	// t_token *token;
-	// list = mini->lo;
-	// while(list)
-	// {
-	// 	token = list->cmdline;
-	// 	while(token->cmd)
-	// 	{
-	// 		printf("token : [%s]\n",token->cmd);
-	// 		token++;
-	// 	}
-	// 	printf("pipe flag : [%d] exit flag : [%d]\n\n", list->pipe_flag, list->exit_flag);
-	// 	list = list->next;
-	// }
 }
