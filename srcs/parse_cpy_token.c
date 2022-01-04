@@ -74,7 +74,7 @@ int	single_cpy(char *src, char **dest)
 	return (src_move);
 }
 
-void	rebuild_cmd(char *src, char *dest, t_minishell *mini)
+int	rebuild_cmd(char *src, char *dest, t_minishell *mini)
 {
 	int		src_move;
 	int		size;
@@ -85,10 +85,30 @@ void	rebuild_cmd(char *src, char *dest, t_minishell *mini)
 	dest_end = dest;
 	while (src[++src_move])
 	{
-		if (src[src_move] == '\'' && unclosed(&src[src_move], '\''))
-			src_move += single_cpy(&src[src_move], &dest_end);
-		else if (src[src_move] == '\"' && unclosed(&src[src_move], '\"'))
-			src_move += double_cpy(&src[src_move], &dest_end, mini);
+		if (src[src_move] == '\'')
+		{
+			if (!single_quote(mini, src, &dest_end, &src_move))
+				return (0);
+			// if (unclosed(&src[src_move], '\''))
+			// 	src_move += single_cpy(&src[src_move], &dest_end);
+			// else
+			// {
+			// 	mini->error = 1;
+			// 	return (0);
+			// }
+		}
+		else if (src[src_move] == '\"')
+		{
+			if (!double_quote(mini, src, &dest_end, &src_move))
+				return (0);
+			// if (unclosed(&src[src_move], '\"'))
+			// 	src_move += double_cpy(&src[src_move], &dest_end, mini);
+			// else
+			// {
+			// 	mini->error = 1;
+			// 	return (0);
+			// }
+		}
 		else if (src[src_move] == '$')
 			src_move += env_cpy(&src[src_move], &dest_end, mini);
 		else if (src[src_move])
@@ -98,4 +118,5 @@ void	rebuild_cmd(char *src, char *dest, t_minishell *mini)
 		}
 	}
 	*dest_end = '\0';
+	return (1);
 }

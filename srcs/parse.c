@@ -2,7 +2,7 @@
 
 void	get_split_size2(const char *s, const char c, t_gss *val)
 {
-	if (*s == c && val->close == 0)// ex) cat[_]
+	if (*s == c && val->close == 0)
 	{
 		reset_add(val);
 		val->begin = 0;
@@ -13,13 +13,13 @@ void	get_split_size2(const char *s, const char c, t_gss *val)
 			val->cnt++;
 		val->redir++;
 	}
-	else if (*s != c && *s != '\'' && *s != '"' && !(*s == '>' || *s == '<') \
+	else if (*s != c && *s != '\'' && *s != '\"' && !(*s == '>' || *s == '<') \
 		&& val->close == 0 && (*(s - 1) == '>' || *(s - 1) == '<'))
 		reset_add(val);
 	else if (*s == '\'' && val->close == '\'' \
 		&& (*(s - 1) == '>' || *(s - 1) == '<'))
 		reset_add(val);
-	else if (*s == '"' && val->close == '"' \
+	else if (*s == '\"' && val->close == '\"' \
 		&& (*(s - 1) == '>' || *(s - 1) == '<'))
 		reset_add(val);
 }
@@ -31,15 +31,15 @@ int	get_split_size(const char *s, const char c)
 	gss_init(&val);
 	while (*s)
 	{
-		if (*s == '"' && val.close == 0)
-			val.close = '"';
-		else if (*s == '"' && val.close == '"')
+		if (*s == '\"' && val.close == 0)
+			val.close = '\"';
+		else if (*s == '\"' && val.close == '\"')
 			val.close = 0;
 		else if (*s == '\'' && val.close == 0)
 			val.close = '\'';
 		else if (*s == '\'' && val.close == '\'')
 			val.close = 0;
-		if (val.begin == 0) // space연속 제거
+		if (val.begin == 0)
 		{
 			if (*s != c)
 				val.begin = 1;
@@ -53,7 +53,8 @@ int	get_split_size(const char *s, const char c)
 	return (val.cnt + val.begin);
 }
 
-t_linked_order	*create_node(t_minishell *mini, char *line, int val_end, int val_prev)
+t_linked_order	*create_node(t_minishell *mini, char *line, \
+	int val_end, int val_prev)
 {
 	t_linked_order	*node;
 
@@ -77,7 +78,7 @@ t_linked_order	*create_node(t_minishell *mini, char *line, int val_end, int val_
 	return (node);
 }
 
-int	insert_LS(t_minishell *mini, char *line, int val_end, int val_prev)
+int	insert_ls(t_minishell *mini, char *line, int val_end, int val_prev)
 {
 	t_linked_order	*list;
 	t_linked_order	*node;
@@ -116,7 +117,7 @@ void	parse(t_minishell *mini, char *line)
 				val.end = 1;
 			if (line[val.move] == '|')
 				line[val.move] = '\0';
-			if (!insert_LS(mini, &line[val.prev], val.end, val.prev))
+			if (!insert_ls(mini, &line[val.prev], val.end, val.prev))
 			{
 				free_all_list(mini->lo);
 				return ;
@@ -126,20 +127,4 @@ void	parse(t_minishell *mini, char *line)
 			val.prev = val.move + 1;
 		}
 	}
-
-	//test....
-	// t_linked_order *list;
-	// t_token *token;
-	// list = mini->lo;
-	// while(list)
-	// {
-	// 	token = list->cmdline;
-	// 	while(token->cmd)
-	// 	{
-	// 		printf("token : [%s] redir flag : [%d]\n",token->cmd, token->redir_flag);
-	// 		token++;
-	// 	}
-	// 	printf("pipe flag : [%d] exit flag : [%d]\n\n", list->pipe_flag, list->exit_flag);
-	// 	list = list->next;
-	// }
 }

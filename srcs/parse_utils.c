@@ -47,18 +47,3 @@ int	ft_strcmp(const char *a, const char *b)
 	}
 	return (*a - *b);
 }
-
-void	free_key_value(t_minishell *mini)
-{
-	int i;
-
-	i = 0;
-	while(mini->key[i])
-	{
-		free(mini->key[i]);
-		free(mini->content[i]);
-		i++;
-	}
-	free(mini->key);
-	free(mini->content);
-}

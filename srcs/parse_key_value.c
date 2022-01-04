@@ -6,7 +6,7 @@ int	env_value_size(char *str, int size, t_minishell *mini)
 	char	*key;
 
 	key = ft_substr(str, 1, size);
-	if (!key) //error
+	if (!key)
 		return (0);
 	index = -1;
 	while (mini->key[++index])
@@ -26,9 +26,6 @@ int	env_key_size(char *str)
 	int	index;
 
 	index = 0;
-	// 숫자면 길이 1리턴인데, 환경변수로 123 = abc가 있는경우, 걸릴거같으니 제외
-	// if (ft_isdigit(str[1]))
-	// 	return (1);
 	while (str[++index])
 	{
 		if (!(ft_isalnum(str[index]) || str[index] == '_'))

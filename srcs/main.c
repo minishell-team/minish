@@ -2,6 +2,21 @@
 
 int	g_exit = 0;
 
+void	free_key_value(t_minishell *mini)
+{
+	int	i;
+
+	i = 0;
+	while (mini->key[i])
+	{
+		free(mini->key[i]);
+		free(mini->content[i]);
+		i++;
+	}
+	free(mini->key);
+	free(mini->content);
+}
+
 void	len_env(t_minishell *mini)
 {
 	int	i;
@@ -27,7 +42,7 @@ void	init_mini(t_minishell *mini, char **envp)
 	int		i;
 	char	**env_aux;
 
-	dup2(STDIN, STDIN_BACKUP); 
+	dup2(STDIN, STDIN_BACKUP);
 	dup2(STDOUT, STDOUT_BACKUP);
 	init_signal();
 	ascii_art();
@@ -63,18 +78,22 @@ int	main(int argc, char **argv, char **envp)
 		{
 			if (line[0] != '\0' && !chk_line(line))
 			{
+				mini.error = 0;
 				add_history(line);
 				parse(&mini, line);
-				g_exit = exec(&mini);
+				if (!mini.error)
+					g_exit = exec(&mini);
+				else
+					printf("quote is not closed!\n");
 				free_all_list(mini.lo);
 			}
 			free(line);
-			continue;
+			continue ;
 		}
 		show_exit_upline();
 		break ;
 	}
 	free_key_value(&mini);
-	argc = (int)&argv;
+	argc = argv[0][0] + 1;
 	return (0);
 }

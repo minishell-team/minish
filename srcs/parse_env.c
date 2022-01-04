@@ -84,7 +84,11 @@ t_token	*rebuild_token(t_minishell *mini, t_token *token)
 				token[i].redir_flag = -1;
 		}
 		token[i].cmd = (char *)malloc(sizeof(char) * (cmd_len + 1));
-		rebuild_cmd(tmp_cmd, token[i].cmd, mini);
+		if (!rebuild_cmd(tmp_cmd, token[i].cmd, mini))
+		{
+			free(tmp_cmd);
+			break ;
+		}
 		free(tmp_cmd);
 	}
 	return (token);

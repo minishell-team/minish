@@ -3,11 +3,11 @@ RM				= rm -rf
 CFLAGS 			= -Wall -Wextra -Werror
 NAME 			= minishell
 
-READLINE_LIB 	= -lreadline -L/usr/local/opt/readline/lib
-READLINE_INC	= -I/usr/local/opt/readline/include
+# READLINE_LIB 	= -lreadline -L/usr/local/opt/readline/lib
+# READLINE_INC	= -I/usr/local/opt/readline/include
 
-# READLINE_LIB 	= -lreadline -L/opt/homebrew/opt/readline/lib
-# READLINE_INC	= -I/opt/homebrew/opt/readline/include
+READLINE_LIB 	= -lreadline -L/opt/homebrew/opt/readline/lib
+READLINE_INC	= -I/opt/homebrew/opt/readline/include
 
 LIBFT		= libft.a
 LIBFT_DIR	= libft
@@ -18,6 +18,7 @@ SRC 		= srcs/main.c srcs/begin_util.c srcs/begin_util2.c \
 			  srcs/parse_cmd.c \
 			  srcs/parse_env.c srcs/parse_utils.c \
 			  srcs/parse_cpy_token.c srcs/parse_key_value.c \
+			  srcs/parse_cpy_token2.c\
 			  srcs/redirect.c srcs/redirect_util1.c \
 			  srcs/redirect_util2.c srcs/ctl_signal.c \
 			  srcs/m_cd.c srcs/m_echo.c srcs/m_env.c \
