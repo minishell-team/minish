@@ -1,5 +1,18 @@
 #include "../includes/minishell.h"
 
+void	make_new_export_space(t_minishell *mini, char ***temp, char ***temp2)
+{
+	*temp = (char **)malloc(sizeof(char *) * (mini->len + 2));
+	if (*temp == NULL)
+		exit_clean(mini, EXIT_FAILURE);
+	*temp2 = (char **)malloc(sizeof(char *) * (mini->len + 2));
+	if (*temp2 == NULL)
+	{
+		free(*temp);
+		exit_clean(mini, EXIT_FAILURE);
+	}
+}
+
 void	enrol_env(t_minishell *mini, char *new_key, char *new_value)
 {
 	char	**temp;
@@ -8,15 +21,7 @@ void	enrol_env(t_minishell *mini, char *new_key, char *new_value)
 
 	if (check_unique_key(mini, new_key, new_value) == FAIL)
 		return ;
-	temp = (char **)malloc(sizeof(char *) * (mini->len + 2));
-	if (temp == NULL)
-		exit_clean(mini, EXIT_FAILURE);
-	temp2 = (char **)malloc(sizeof(char *) * (mini->len + 2));
-	if (temp2 == NULL)
-	{
-		free(temp);
-		exit_clean(mini, EXIT_FAILURE);
-	}
+	make_new_export_space(mini, &temp, &temp2);
 	i = -1;
 	while (++i < mini->len)
 	{
