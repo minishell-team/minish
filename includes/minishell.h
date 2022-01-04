@@ -17,7 +17,7 @@
 # define STDOUT 		1
 # define STDERR 		2
 
-extern int g_exit; // exit함수에 사용할 종료 상태
+extern int g_exit;
 
 typedef struct	s_err
 {
@@ -28,7 +28,7 @@ typedef struct	s_err
 
 typedef struct	s_token
 {
-	char		*cmd; // 토큰 문자열
+	char		*cmd;
 	char		redir_flag; // 리다이렉트여부
 }				t_token;
 
